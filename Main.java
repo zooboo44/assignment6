@@ -13,6 +13,7 @@ public class Main {
         MyFrame transButtons = new MyFrame(checking, df);
         do {
             if(checking.getIsFirstTimeAccount()){
+                checking.setAccountName(JOptionPane.showInputDialog("Enter Account Name: "));
                 checking.setBalance(Double.parseDouble(JOptionPane.showInputDialog("Enter Initial Balance: ")));
             }
             transButtons.setVisible(true);

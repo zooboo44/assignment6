@@ -23,7 +23,7 @@ public class MyFrame extends JFrame implements ActionListener {
         this.setLayout(new FlowLayout());
         this.df = df;
 
-        enterNewTransaction = new JRadioButton("Enter assignment4.Transaction");
+        enterNewTransaction = new JRadioButton("Enter Transaction Number");
         listAllTransactions = new JRadioButton("List All Transactions");
         listAllChecks = new JRadioButton("List All Checks");
         listAllDeposits = new JRadioButton("List All Deposits");
@@ -53,7 +53,7 @@ public class MyFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == enterNewTransaction){
             this.setVisible(false);
-            int transCode = Integer.parseInt(JOptionPane.showInputDialog("Enter assignment4.Transaction Number: "));
+            int transCode = Integer.parseInt(JOptionPane.showInputDialog("Enter Transaction Number: "));
             if(transCode >= 0 && transCode <= 2){
                 switch(transCode){
                     case 0:
@@ -77,7 +77,7 @@ public class MyFrame extends JFrame implements ActionListener {
                 }
             }
             else{
-                JOptionPane.showMessageDialog(null,"Invalid assignment4.Transaction Code");
+                JOptionPane.showMessageDialog(null,"Invalid Transaction Code");
             }
         }
         if(e.getSource() == listAllTransactions){

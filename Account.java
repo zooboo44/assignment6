@@ -7,8 +7,10 @@ public class Account {
     public String getAccountName(){
         return accountName;
     }
-
     public double getBalance(){
         return balance;
+    }
+    public void setAccountName(String name){
+        accountName = name;
     }
 }

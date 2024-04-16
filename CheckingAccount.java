@@ -12,7 +12,7 @@ public class CheckingAccount extends Account{
     //private double balance = 0;
     private double totalServiceCharge = 0;
     private boolean isFirstTimeAccount = true, first500 = true;
-    private String summary = getAccountName() + "\n";
+    private String summary = "";
     private final DecimalFormat df;
     private ArrayList<Transaction> transList = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class CheckingAccount extends Account{
         balance -= amount;
         transList.add(new Transaction(4, Transaction.getNextCount(), 0.15));
         addToTotalServiceCharge(0.15);
-        summary = summary.concat("assignment4.Transaction: Check in Amount of: " + df.format(amount) + "\n");
+        summary = summary.concat("Transaction: Check in Amount of: " + df.format(amount) + "\n");
         summary = summary.concat("Service Charge: Check --- charge " + df.format(0.15) + "\n");
         if(balance < 500 && first500){
             transList.add(new Transaction(4, Transaction.getNextCount(), 5));
@@ -69,7 +69,7 @@ public class CheckingAccount extends Account{
         balance += amount;
         transList.add(new Transaction(4, Transaction.getNextCount(), 0.10));
         addToTotalServiceCharge(0.10);
-        summary = summary.concat("assignment4.Transaction: Deposit in Amount of " + amount + "\n");
+        summary = summary.concat("Transaction: Deposit in Amount of " + df.format(amount) + "\n");
         summary = summary.concat("Total Balance: " + balance + "\n");
         summary = summary.concat("Service Charge: Check " + df.format(0.10)) + "\n";
     }
@@ -81,9 +81,15 @@ public class CheckingAccount extends Account{
     }
     public void endTransaction(){
         subTotalServiceCharge();
-        summary = summary.concat("assignment4.Transaction: End" + "\n");
+        summary = summary.concat("Transaction: End" + "\n");
     }
     public ArrayList getTransList(){
         return transList;
+    }
+
+    @Override
+    public void setAccountName(String name) {
+        super.setAccountName(name);
+        summary = summary.concat(name + "\n");
     }
 }
