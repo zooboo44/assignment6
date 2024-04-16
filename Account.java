@@ -2,7 +2,7 @@ package assignment4;
 
 public class Account {
     String accountName;
-    double balance;
+    double balance = 0;
 
     public String getAccountName(){
         return accountName;

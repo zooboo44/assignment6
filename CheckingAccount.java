@@ -9,7 +9,6 @@ public class CheckingAccount extends Account{
         this.df = df;
     }
     //Variables
-    //private double balance = 0;
     private double totalServiceCharge = 0;
     private boolean isFirstTimeAccount = true, first500 = true;
     private String summary = "";
@@ -17,9 +16,6 @@ public class CheckingAccount extends Account{
     private ArrayList<Transaction> transList = new ArrayList<>();
 
     //Get
-//    public double getBalance() {
-//        return balance;
-//    }
     public double getTotalServiceCharge(){
         return totalServiceCharge;
     }
