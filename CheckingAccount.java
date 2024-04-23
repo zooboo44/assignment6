@@ -41,12 +41,12 @@ public class CheckingAccount extends Account{
     public void addToTotalServiceCharge(double ServiceCharge) {
         this.totalServiceCharge += ServiceCharge;
     }
-    public void withdraw(int transNumber, double amount){
-        transList.add(new Transaction(transNumber, Transaction.getNextCount(), amount));
+    public void withdraw(int transNumber, double amount, int checkNumber){
+        transList.add(new Check(transNumber, Transaction.getNextCount(), amount, checkNumber));
         balance -= amount;
         transList.add(new Transaction(4, Transaction.getNextCount(), 0.15));
         addToTotalServiceCharge(0.15);
-        summary = summary.concat("Transaction: Check in Amount of: " + df.format(amount) + "\n");
+        summary = summary.concat("Transaction: Check #" + checkNumber + " in Amount of: " + df.format(amount) + "\n");
         summary = summary.concat("Service Charge: Check --- charge " + df.format(0.15) + "\n");
         if(balance < 500 && first500){
             transList.add(new Transaction(4, Transaction.getNextCount(), 5));
@@ -70,7 +70,7 @@ public class CheckingAccount extends Account{
         summary = summary.concat("Service Charge: Check " + df.format(0.10)) + "\n";
     }
     public void clearSummary(){
-        summary = getAccountName() + "\n";
+        summary = getAccountName() + "'s Account" + "\n";
     }
     public void subTotalServiceCharge(){
         balance -= totalServiceCharge;
@@ -86,6 +86,6 @@ public class CheckingAccount extends Account{
     @Override
     public void setAccountName(String name) {
         super.setAccountName(name);
-        summary = summary.concat(name + "\n");
+        summary = summary.concat(name + "'s Account" + "\n");
     }
 }

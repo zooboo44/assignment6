@@ -63,7 +63,8 @@ public class MyFrame extends JFrame implements ActionListener {
                         break;
                     case 1:
                         this.setVisible(false);
-                        acct.withdraw(transCode, Double.parseDouble(JOptionPane.showInputDialog("Enter Withdraw Amount")));
+                        int checkNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter Check Number"));
+                        acct.withdraw(transCode, Double.parseDouble(JOptionPane.showInputDialog("Enter Check Amount")), checkNumber);
                         JOptionPane.showMessageDialog(null, acct.getSummary());
                         acct.clearSummary();
                         break;
@@ -82,7 +83,7 @@ public class MyFrame extends JFrame implements ActionListener {
         }
         if(e.getSource() == listAllTransactions){
             ArrayList<Transaction> temp = acct.getTransList();
-            String message = acct.getAccountName() + "\n List all Transactions: \n ID\t Type\t Amount\n";
+            String message = "List all Transactions:\n" + acct.getAccountName() + "'s Account \n" + "ID\t Type\t Amount\n";
             for (Transaction transaction : temp) {
                 message = message.concat(transaction.getTransId() + "    ");
                 if(transaction.getTransNumber() == 1){
