@@ -60,12 +60,20 @@ public class CheckingAccount extends Account{
             summary = summary.concat("Service Charge: Below $0 --- charge " + df.format(10.0)) + "\n";
         }
     }
-    public void deposit(int transNumber, double amount){
-        transList.add(new Transaction(transNumber, Transaction.getNextCount(), amount));
-        balance += amount;
-        transList.add(new Transaction(4, Transaction.getNextCount(), 0.10));
-        addToTotalServiceCharge(0.10);
-        summary = summary.concat("Transaction: Deposit in Amount of " + df.format(amount) + "\n");
+    public void deposit(int transNumber, double cashAmount, double checkAmount){
+        if(cashAmount > 0){
+            transList.add(new Deposit(transNumber, Transaction.getNextCount(), cashAmount));
+            transList.add(new Transaction(4, Transaction.getNextCount(), 0.10));
+            addToTotalServiceCharge(0.10);
+        }
+        if(checkAmount > 0){
+            transList.add(new Deposit(transNumber, Transaction.getNextCount(), checkAmount));
+            transList.add(new Transaction(4, Transaction.getNextCount(), 0.10));
+            addToTotalServiceCharge(0.10);
+        }
+        double totalDepositAmount = cashAmount + checkAmount;
+        balance += totalDepositAmount;
+        summary = summary.concat("Transaction: Deposit in Amount of " + df.format(totalDepositAmount) + "\n");
         summary = summary.concat("Total Balance: " + balance + "\n");
         summary = summary.concat("Service Charge: Check " + df.format(0.10)) + "\n";
     }

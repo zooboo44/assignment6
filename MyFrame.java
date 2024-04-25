@@ -70,7 +70,16 @@ public class MyFrame extends JFrame implements ActionListener {
                         break;
                     case 2:
                         this.setVisible(false);
-                        acct.deposit(transCode, Double.parseDouble(JOptionPane.showInputDialog("Enter Deposit Amount: ")));
+                        JTextField cashField = new JTextField(10);
+                        JTextField checkField = new JTextField(10);
+                        JPanel newPanel = new JPanel();
+                        newPanel.add(new JLabel("Cash: "));
+                        newPanel.add(cashField);
+                        newPanel.add(Box.createVerticalStrut(15));
+                        newPanel.add(new JLabel("Check: "));
+                        newPanel.add(checkField);
+                        JOptionPane.showConfirmDialog(null, newPanel, "enter deposit amount", JOptionPane.OK_CANCEL_OPTION);
+                        acct.deposit(transCode, Double.parseDouble(cashField.getText()), Double.parseDouble(checkField.getText()));
                         JOptionPane.showMessageDialog(null, acct.getSummary());
                         acct.clearSummary();
                         this.setVisible(true);
