@@ -101,7 +101,7 @@ public class MyFrame extends JFrame implements ActionListener {
         }
         if(e.getSource() == listAllChecks){
             ArrayList<Transaction> temp = acct.getTransList();
-            String message = acct.getAccountName() + "\n List all Checks \n";
+            String message = acct.getAccountName() + "'s Account" + "\n List all Checks \n";
             for(Transaction transaction : temp){
                 if(transaction.getTransNumber() == 1){
                     message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
@@ -111,7 +111,7 @@ public class MyFrame extends JFrame implements ActionListener {
         }
         if(e.getSource() == listAllDeposits) {
             ArrayList<Transaction> temp = acct.getTransList();
-            String message = acct.getAccountName() + "\n List all Deposits \n";
+            String message = acct.getAccountName() + "'s Account" + "\n List all Deposits \n";
             for (Transaction transaction : temp) {
                 if (transaction.getTransNumber() == 2) {
                     message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
