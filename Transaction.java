@@ -1,6 +1,8 @@
-package assignment4;
+package assignment6;
 
-public class Transaction {
+import java.io.Serializable;
+
+public class Transaction implements Serializable {
     private int transNumber;
     private int transId = 0;
     private double transAmt;

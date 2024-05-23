@@ -1,9 +1,10 @@
-package assignment4;
+package assignment6;
 
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class CheckingAccount extends Account{
+public class CheckingAccount extends Account implements Serializable{
     //Constructor
     CheckingAccount(DecimalFormat df){
         this.df = df;
@@ -13,7 +14,9 @@ public class CheckingAccount extends Account{
     private boolean isFirstTimeAccount = true, first500 = true;
     private String summary = "";
     private final DecimalFormat df;
-    private ArrayList<Transaction> transList = new ArrayList<>();
+    public ArrayList<Transaction> transList = new ArrayList<>();
+    String filePath = "C:\\Users\\ziobr\\Documents\\file.dat";
+    boolean saved = false;
 
     //Get
     public double getTotalServiceCharge(){
@@ -96,4 +99,5 @@ public class CheckingAccount extends Account{
         super.setAccountName(name);
         summary = summary.concat(name + "'s Account" + "\n");
     }
+
 }

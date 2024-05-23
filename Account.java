@@ -1,6 +1,8 @@
-package assignment4;
+package assignment6;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable {
     String accountName;
     double balance = 0;
 

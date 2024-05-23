@@ -1,9 +1,10 @@
-package assignment4;
+package assignment6;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -13,6 +14,8 @@ public class MyFrame extends JFrame implements ActionListener {
     JRadioButton listAllTransactions;
     JRadioButton listAllChecks;
     JRadioButton listAllDeposits;
+    JRadioButton saveFile;
+    JRadioButton openFile;
     CheckingAccount acct;
 
     DecimalFormat df;
@@ -27,22 +30,31 @@ public class MyFrame extends JFrame implements ActionListener {
         listAllTransactions = new JRadioButton("List All Transactions");
         listAllChecks = new JRadioButton("List All Checks");
         listAllDeposits = new JRadioButton("List All Deposits");
+        saveFile = new JRadioButton("Save filesss");
+        openFile = new JRadioButton("Open File");
 
         ButtonGroup group = new ButtonGroup();
         group.add(enterNewTransaction);
         group.add(listAllTransactions);
         group.add(listAllChecks);
         group.add(listAllDeposits);
+        group.add(saveFile);
+        group.add(openFile);
 
         this.add(enterNewTransaction);
         this.add(listAllTransactions);
         this.add(listAllChecks);
         this.add(listAllDeposits);
+        this.add(saveFile);
+        this.add(openFile);
 
         enterNewTransaction.addActionListener(this);
         listAllTransactions.addActionListener(this);
         listAllChecks.addActionListener(this);
         listAllDeposits.addActionListener(this);
+        saveFile.addActionListener(this);
+        openFile.addActionListener(this);
+
 
 
         this.pack();
@@ -73,12 +85,12 @@ public class MyFrame extends JFrame implements ActionListener {
                         JTextField cashField = new JTextField(10);
                         JTextField checkField = new JTextField(10);
                         JPanel newPanel = new JPanel();
-                        newPanel.add(new JLabel("Cash: "));
+                        newPanel.add(new JLabel("Cash Amount: "));
                         newPanel.add(cashField);
                         newPanel.add(Box.createVerticalStrut(15));
-                        newPanel.add(new JLabel("Check: "));
+                        newPanel.add(new JLabel("Check Amount: "));
                         newPanel.add(checkField);
-                        JOptionPane.showConfirmDialog(null, newPanel, "enter deposit amount", JOptionPane.OK_CANCEL_OPTION);
+                        JOptionPane.showConfirmDialog(null, newPanel, "Enter deposit amount", JOptionPane.OK_CANCEL_OPTION);
                         acct.deposit(transCode, Double.parseDouble(cashField.getText()), Double.parseDouble(checkField.getText()));
                         JOptionPane.showMessageDialog(null, acct.getSummary());
                         acct.clearSummary();
@@ -127,6 +139,69 @@ public class MyFrame extends JFrame implements ActionListener {
                 }
             }
             JOptionPane.showMessageDialog(null, message);
+        }
+        if(e.getSource() == saveFile){
+            chooseFile(1);
+            try {
+                FileOutputStream fos = new FileOutputStream(acct.filePath);
+                ObjectOutputStream out = new ObjectOutputStream(fos);
+                out.writeObject(acct);
+                out.close();
+                acct.saved = true;
+            }
+            catch (IOException error){
+                System.out.println(error);
+            }
+        }
+        if(e.getSource() == openFile){
+            int confirm;
+            if (!acct.saved)
+            {
+                String  message = "The data in the application is not saved.\n"+
+                        "would you like to save it before reading the new file in?";
+                confirm = JOptionPane.showConfirmDialog (null, message);
+                if (confirm == JOptionPane.YES_OPTION)
+                    chooseFile(2);
+            }
+            chooseFile(1);
+            try
+            {
+                FileInputStream fis = new
+                        FileInputStream(acct.filePath);
+                ObjectInputStream in = new
+                        ObjectInputStream(fis);
+                acct = (CheckingAccount) in.readObject();
+                in.close();
+                acct.saved = true;
+            }
+            catch(ClassNotFoundException exception)
+            {
+                System.out.println(exception);
+            }
+            catch (IOException exception)
+            {
+                System.out.println(exception);
+            }
+
+        }
+    }
+    public void chooseFile(int ioOption){
+        int status, confirm;
+
+        String  message = "Would you like to use the current default file: \n" +
+                acct.filePath;
+        confirm = JOptionPane.showConfirmDialog (null, message);
+        if (confirm == JOptionPane.YES_OPTION)
+            return;
+        JFileChooser chooser = new JFileChooser();
+        if (ioOption == 1)
+            status = chooser.showOpenDialog (null);
+        else
+            status = chooser.showSaveDialog (null);
+        if (status == JFileChooser.APPROVE_OPTION)
+        {
+            File file = chooser.getSelectedFile();
+            acct.filePath = file.getPath();
         }
     }
 }

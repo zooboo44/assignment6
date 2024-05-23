@@ -1,4 +1,4 @@
-package assignment4;
+package assignment6;
 
 import javax.swing.*;
 import java.text.DecimalFormat;

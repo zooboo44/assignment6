@@ -1,6 +1,8 @@
-package assignment4;
+package assignment6;
 
-public class Check extends Transaction{
+import java.io.Serializable;
+
+public class Check extends Transaction implements Serializable {
     int checkNumber;
 
     Check(int transNumber, int transID, double transAmt, int checkNumber){
