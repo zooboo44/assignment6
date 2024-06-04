@@ -1,5 +1,6 @@
 package assignment6;
 
+import javax.swing.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -10,20 +11,15 @@ public class CheckingAccount extends Account implements Serializable{
         this.df = df;
     }
     //Variables
-    private double totalServiceCharge = 0;
-    private boolean isFirstTimeAccount = true, first500 = true;
+    private boolean first500 = true;
     private String summary = "";
     private final DecimalFormat df;
     public ArrayList<Transaction> transList = new ArrayList<>();
-    String filePath = "C:\\Users\\ziobr\\Documents\\file.dat";
-    boolean saved = false;
 
     //Get
+    @Override
     public double getTotalServiceCharge(){
         return totalServiceCharge;
-    }
-    public boolean getIsFirstTimeAccount(){
-        return isFirstTimeAccount;
     }
     public String getSummary(){
         summary = summary.concat("Total balance: " + df.format(getBalance()) + "\n");
@@ -34,12 +30,8 @@ public class CheckingAccount extends Account implements Serializable{
         return summary;
     }
 
-    public void setFirstTimeAccountFalse(){
-        isFirstTimeAccount = false;
-    }
     public void setBalance(double balance) {
         this.balance = balance;
-        setFirstTimeAccountFalse();
     }
     public void addToTotalServiceCharge(double ServiceCharge) {
         this.totalServiceCharge += ServiceCharge;
@@ -80,6 +72,42 @@ public class CheckingAccount extends Account implements Serializable{
         summary = summary.concat("Total Balance: " + balance + "\n");
         summary = summary.concat("Service Charge: Check " + df.format(0.10)) + "\n";
     }
+    @Override
+    public void enterTrans(){
+        int transCode = Integer.parseInt(JOptionPane.showInputDialog("Enter Transaction Number: "));
+        if(transCode >= 0 && transCode <= 2){
+            switch(transCode){
+                case 0:
+                    endTransaction();
+                    JOptionPane.showMessageDialog(null, getSummary());
+                    clearSummary();
+                    break;
+                case 1:
+                    int checkNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter Check Number"));
+                    withdraw(transCode, Double.parseDouble(JOptionPane.showInputDialog("Enter Check Amount")), checkNumber);
+                    JOptionPane.showMessageDialog(null, getSummary());
+                    clearSummary();
+                    break;
+                case 2:
+                    JTextField cashField = new JTextField(10);
+                    JTextField checkField = new JTextField(10);
+                    JPanel newPanel = new JPanel();
+                    newPanel.add(new JLabel("Cash Amount: "));
+                    newPanel.add(cashField);
+                    newPanel.add(Box.createVerticalStrut(15));
+                    newPanel.add(new JLabel("Check Amount: "));
+                    newPanel.add(checkField);
+                    JOptionPane.showConfirmDialog(null, newPanel, "Enter deposit amount", JOptionPane.OK_CANCEL_OPTION);
+                    deposit(transCode, Double.parseDouble(cashField.getText()), Double.parseDouble(checkField.getText()));
+                    JOptionPane.showMessageDialog(null, getSummary());
+                    clearSummary();
+                    break;
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"Invalid Transaction Code");
+        }
+    }
     public void clearSummary(){
         summary = getAccountName() + "'s Account" + "\n";
     }
@@ -98,6 +126,54 @@ public class CheckingAccount extends Account implements Serializable{
     public void setAccountName(String name) {
         super.setAccountName(name);
         summary = summary.concat(name + "'s Account" + "\n");
+    }
+
+    public String listTrans(){
+        String message = "List all Transactions:\n" + getAccountName() + "'s Account \n" + "ID\t Type\t Amount\n";
+        for (Transaction transaction : transList) {
+            message = message.concat(transaction.getTransId() + "    ");
+            if(transaction.getTransNumber() == 1){
+                message = message.concat("Check    ");
+            }
+            if(transaction.getTransNumber() == 2){
+                message = message.concat("Deposit    ");
+            }
+            if(transaction.getTransNumber() == 4){
+                message = message.concat("Svc. Crg.    ");
+            }
+            message = message.concat(df.format(transaction.getTransAmt()) + "\n");
+        }
+        return message;
+    }
+
+    public String listChecks(){
+        String message = getAccountName() + "'s Account" + "\n List all Checks \n";
+        for(Transaction transaction : transList){
+            if(transaction.getTransNumber() == 1){
+                message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
+            }
+        }
+        return message;
+    }
+
+    public String listDeposits(){
+        String message = getAccountName() + "'s Account" + "\n List all Deposits \n";
+        for (Transaction transaction : transList) {
+            if (transaction.getTransNumber() == 2) {
+                message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
+            }
+        }
+        return message;
+    }
+
+    public String listServiceCharges(){
+        String message = getAccountName() + "'s Account" + "\n List all Service Charges \n";
+        for (Transaction transaction : transList) {
+            if (transaction.getTransNumber() == 4) {
+                message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
+            }
+        }
+        return message;
     }
 
 }

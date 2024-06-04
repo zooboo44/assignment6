@@ -17,6 +17,8 @@ public class MyFrame extends JFrame implements ActionListener {
     JRadioButton saveFile;
     JRadioButton openFile;
     CheckingAccount acct;
+    String filePath;
+    boolean saved;
 
     DecimalFormat df;
 
@@ -143,11 +145,11 @@ public class MyFrame extends JFrame implements ActionListener {
         if(e.getSource() == saveFile){
             chooseFile(1);
             try {
-                FileOutputStream fos = new FileOutputStream(acct.filePath);
+                FileOutputStream fos = new FileOutputStream(filePath);
                 ObjectOutputStream out = new ObjectOutputStream(fos);
                 out.writeObject(acct);
                 out.close();
-                acct.saved = true;
+                saved = true;
             }
             catch (IOException error){
                 System.out.println(error);
@@ -155,7 +157,7 @@ public class MyFrame extends JFrame implements ActionListener {
         }
         if(e.getSource() == openFile){
             int confirm;
-            if (!acct.saved)
+            if (!saved)
             {
                 String  message = "The data in the application is not saved.\n"+
                         "would you like to save it before reading the new file in?";
@@ -167,12 +169,12 @@ public class MyFrame extends JFrame implements ActionListener {
             try
             {
                 FileInputStream fis = new
-                        FileInputStream(acct.filePath);
+                        FileInputStream(filePath);
                 ObjectInputStream in = new
                         ObjectInputStream(fis);
                 acct = (CheckingAccount) in.readObject();
                 in.close();
-                acct.saved = true;
+                saved = true;
             }
             catch(ClassNotFoundException exception)
             {
@@ -189,7 +191,7 @@ public class MyFrame extends JFrame implements ActionListener {
         int status, confirm;
 
         String  message = "Would you like to use the current default file: \n" +
-                acct.filePath;
+                filePath;
         confirm = JOptionPane.showConfirmDialog (null, message);
         if (confirm == JOptionPane.YES_OPTION)
             return;
@@ -201,7 +203,7 @@ public class MyFrame extends JFrame implements ActionListener {
         if (status == JFileChooser.APPROVE_OPTION)
         {
             File file = chooser.getSelectedFile();
-            acct.filePath = file.getPath();
+            filePath = file.getPath();
         }
     }
 }
