@@ -10,6 +10,11 @@ public class CheckingAccount extends Account implements Serializable{
     CheckingAccount(DecimalFormat df){
         this.df = df;
     }
+    CheckingAccount(String name, Double amt, DecimalFormat df){
+        this.accountName = name;
+        this.balance = amt;
+        this.df = df;
+    }
     //Variables
     private boolean first500 = true;
     private String summary = "";
@@ -22,6 +27,7 @@ public class CheckingAccount extends Account implements Serializable{
         return totalServiceCharge;
     }
     public String getSummary(){
+        summary = summary.concat("Name: " + getAccountName()) + "\n";
         summary = summary.concat("Total balance: " + df.format(getBalance()) + "\n");
         summary = summary.concat("Total service charge amount: " + df.format(getTotalServiceCharge()) + "\n");
         if(balance < 50){
@@ -109,7 +115,7 @@ public class CheckingAccount extends Account implements Serializable{
         }
     }
     public void clearSummary(){
-        summary = getAccountName() + "'s Account" + "\n";
+        summary = "";
     }
     public void subTotalServiceCharge(){
         balance -= totalServiceCharge;
@@ -125,11 +131,11 @@ public class CheckingAccount extends Account implements Serializable{
     @Override
     public void setAccountName(String name) {
         super.setAccountName(name);
-        summary = summary.concat(name + "'s Account" + "\n");
+        summary = "";
     }
 
     public String listTrans(){
-        String message = "List all Transactions:\n" + getAccountName() + "'s Account \n" + "ID\t Type\t Amount\n";
+        String message = "List all Transactions:\n" + getSummary() + "ID\t Type\t Amount\n";
         for (Transaction transaction : transList) {
             message = message.concat(transaction.getTransId() + "    ");
             if(transaction.getTransNumber() == 1){
@@ -147,7 +153,7 @@ public class CheckingAccount extends Account implements Serializable{
     }
 
     public String listChecks(){
-        String message = getAccountName() + "'s Account" + "\n List all Checks \n";
+        String message = "List all Checks \n" + getSummary();
         for(Transaction transaction : transList){
             if(transaction.getTransNumber() == 1){
                 message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
@@ -157,7 +163,7 @@ public class CheckingAccount extends Account implements Serializable{
     }
 
     public String listDeposits(){
-        String message = getAccountName() + "'s Account" + "\n List all Deposits \n";
+        String message ="List all Deposits \n" + getSummary();
         for (Transaction transaction : transList) {
             if (transaction.getTransNumber() == 2) {
                 message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));
@@ -167,7 +173,7 @@ public class CheckingAccount extends Account implements Serializable{
     }
 
     public String listServiceCharges(){
-        String message = getAccountName() + "'s Account" + "\n List all Service Charges \n";
+        String message = "List all Service Charges \n" + getSummary();
         for (Transaction transaction : transList) {
             if (transaction.getTransNumber() == 4) {
                 message = message.concat(transaction.getTransId() + "    " + df.format(transaction.getTransAmt()));

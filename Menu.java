@@ -12,10 +12,10 @@ public class Menu extends JFrame implements ActionListener {
     JMenuBar mb;
     JMenu file, accounts, transactions;
     JMenuItem openFile, saveFile, newAcct, listTrans, listChecks, listDeposits, listServiceCharges, findAcct, listAcct, enterTrans;
-    Account acct;
+    CheckingAccount acct;
     DecimalFormat df;
     public static JTextArea ta;
-    ArrayList<Account> allAccounts = new ArrayList<>();
+    ArrayList<CheckingAccount> allAccounts = new ArrayList<>();
     boolean saved = false;
     String filePath = "C:\\Users\\ziobr\\Documents\\file.dat";
 
@@ -80,13 +80,19 @@ public class Menu extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == findAcct){
+            String message = "";
             clearTextBox();
             String selectedAcctname = JOptionPane.showInputDialog(null, "Enter Account Name");
-            for(Account temp : allAccounts) {
+            for(CheckingAccount temp : allAccounts) {
                 if (temp.getAccountName().equals(selectedAcctname)) {
+                    message = message.concat("Account found for " + temp.getAccountName() + "\n");
                     acct = temp;
+                    ta.setText(message);
+                    return;
                 }
             }
+            message = message.concat("Account not found for " + selectedAcctname + "\n");
+            ta.setText(message);
             return;
         }
         if(e.getSource() == listAcct){
@@ -101,7 +107,7 @@ public class Menu extends JFrame implements ActionListener {
         if(e.getSource() == newAcct){
             String message = "New account added for ";
             String name = JOptionPane.showInputDialog("Enter name: ");
-            Account newAcct = new Account(name, Integer.parseInt(JOptionPane.showInputDialog("Enter Amount")));
+            CheckingAccount newAcct = new CheckingAccount(name, Double.parseDouble(JOptionPane.showInputDialog("Enter Amount")), df);
             allAccounts.add(newAcct);
             message = message.concat(name);
             ta.setText(message);
@@ -127,7 +133,7 @@ public class Menu extends JFrame implements ActionListener {
                         FileInputStream(filePath);
                 ObjectInputStream in = new
                         ObjectInputStream(fis);
-                allAccounts = (ArrayList<Account>) in.readObject();
+                allAccounts = (ArrayList<CheckingAccount>) in.readObject();
                 in.close();
                 saved = true;
             }
@@ -163,20 +169,25 @@ public class Menu extends JFrame implements ActionListener {
         if(e.getSource() == listTrans){
             clearTextBox();
             ta.setText(acct.listTrans());
+            acct.clearSummary();
         }
         if(e.getSource() == listChecks){
             clearTextBox();
            ta.setText(acct.listChecks());
+           acct.clearSummary();
         }
         if(e.getSource() == listDeposits){
             clearTextBox();
             ta.setText(acct.listDeposits());
+            acct.clearSummary();
         }
         if(e.getSource() == listServiceCharges) {
             ta.setText(acct.listServiceCharges());
+            acct.clearSummary();
         }
         if(e.getSource() == enterTrans){
             acct.enterTrans();
+            acct.clearSummary();
         }
     }
     public void chooseFile(int ioOption){
