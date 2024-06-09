@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -76,6 +78,9 @@ public class Menu extends JFrame implements ActionListener {
         listAcct.addActionListener(this);
         enterTrans.addActionListener(this);
         this.setVisible(true);
+
+        FrameListener listener = new FrameListener();
+        addWindowListener(listener);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -214,5 +219,19 @@ public class Menu extends JFrame implements ActionListener {
     }
     public void selectAcct(CheckingAccount acct){
         this.acct = acct;
+    }
+
+    private class FrameListener extends WindowAdapter {
+        public void windowClosing(WindowEvent e) {
+            int confirm;
+            if (!saved) {
+                String message = "The data in the application is not saved.\n" +
+                        "Would you like to save it before exiting the application?";
+                confirm = JOptionPane.showConfirmDialog(null, message);
+                if (confirm == JOptionPane.YES_OPTION)
+                    chooseFile(2);
+            }
+            System.exit(0);
+        }
     }
 }
